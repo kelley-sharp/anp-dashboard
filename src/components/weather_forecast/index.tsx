@@ -11,15 +11,31 @@ type WeatherForecastProps = {
   daily: DailyItem[] | undefined;
 };
 
-const dayOfTheWeek = moment().format("dddd");
-
-// const weekDayMap = {
-//   0:
-// }
+const TodaysWeekDay = moment().format("dddd");
 
 const WeatherForecast: React.FunctionComponent<WeatherForecastProps> = ({
   daily,
 }) => {
+  // set weekdays
+  let weekDayMap = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  //Trim extra days in forecast from data
+  const sevenDayForecast = daily?.filter((day, idx) => idx <= 6);
+
+  for (let i = 0; i < weekDayMap.length; i++) {
+    if (weekDayMap[i] === TodaysWeekDay) {
+      weekDayMap[i] = "Today";
+    }
+  }
+
   // show loading spinner if waiting for data
   if (!daily) {
     return (
@@ -37,7 +53,6 @@ const WeatherForecast: React.FunctionComponent<WeatherForecastProps> = ({
     );
   }
 
-  console.log(dayOfTheWeek);
   return (
     <div
       style={{
@@ -48,19 +63,20 @@ const WeatherForecast: React.FunctionComponent<WeatherForecastProps> = ({
       <SubHeading>WEATHER FORECAST</SubHeading>
       <Container>
         <Row>
-          {daily.map((day, idx) => {
+          {sevenDayForecast?.map((day, idx) => {
             return (
               <Col key={idx}>
                 <Row>
-                  <Col>
-                    <p>{dayOfTheWeek}</p>
+                  <Col style={{ height: "10px" }}>
+                    <p>{weekDayMap[idx]}</p>
                   </Col>
                 </Row>
                 <Row>
                   <Col>
                     <img
+                      style={{ height: "55px", width: "55px" }}
                       src={`http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`}
-                      alt={`${day.weather[0].main}-icon`}
+                      alt={`${day.weather[0].main} icon`}
                     />
                   </Col>
                 </Row>

@@ -48,7 +48,7 @@ function App() {
   }, []);
 
   return (
-    <Container>
+    <Container fluid>
       <Row>
         <Col>
           <Header>Acadia National Park Dashboard</Header>
@@ -80,7 +80,7 @@ function App() {
           </Row>
           <Row>
             <Col>
-              <SunshineOMeter />
+              <SunshineOMeter currentWeather={weatherData?.current} />
             </Col>
           </Row>
         </Col>

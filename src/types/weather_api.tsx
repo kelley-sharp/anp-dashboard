@@ -74,6 +74,26 @@ export type DailyItem = {
   uvi: number;
 };
 
+export type currentWeatherItem = {
+  dt: number;
+  sunrise: number;
+  sunset: number;
+  temp: number;
+  feels_like: number;
+  pressure: number;
+  humidity: number;
+  dew_point: number;
+  uvi: number;
+  clouds: number;
+  visibility: number;
+  wind_speed: number;
+  wind_deg: number;
+  weather: WeatherItem[];
+  rain: {
+    "1h": number;
+  };
+};
+
 export type Alert = {
   sender_name: string;
   event: string;
@@ -88,25 +108,7 @@ export type WeatherApiOneCallResponse = {
   lon: number;
   timezone: string;
   timezone_offset: number;
-  current: {
-    dt: number;
-    sunrise: number;
-    sunset: number;
-    temp: number;
-    feels_like: number;
-    pressure: number;
-    humidity: number;
-    dew_point: number;
-    uvi: number;
-    clouds: number;
-    visibility: number;
-    wind_speed: number;
-    wind_deg: number;
-    weather: WeatherItem[];
-    rain: {
-      "1h": number;
-    };
-  };
+  current: currentWeatherItem;
   minutely: MinutelyItem[];
   hourly: HourlyItem[];
   daily: DailyItem[];
