@@ -19,6 +19,11 @@ const Header = styled.h1`
   margin-top: 2rem;
 `;
 
+export const SubHeading = styled.p`
+  height: 15px;
+  color: darkgreen;
+`;
+
 const weatherBaseURL = "https://api.openweathermap.org/data/2.5/onecall?";
 const coordinates = [44.385833, -68.209444];
 const key = process.env.REACT_APP_OPEN_WEATHER_API_KEY;
@@ -31,7 +36,7 @@ function App() {
     try {
       const fetchWeatherData = async () => {
         const response = await axios.get<WeatherApiOneCallResponse>(
-          `${weatherBaseURL}lat=${coordinates[0]}&lon=${coordinates[1]}&appid=${key}`
+          `${weatherBaseURL}lat=${coordinates[0]}&lon=${coordinates[1]}&appid=${key}&units=imperial`
         );
         setWeatherData(response.data);
         console.log(response.data);
@@ -70,7 +75,7 @@ function App() {
           </Row>
           <Row>
             <Col>
-              <WeatherForecast exampleProp={1} />
+              <WeatherForecast daily={weatherData?.daily} />
             </Col>
           </Row>
           <Row>
