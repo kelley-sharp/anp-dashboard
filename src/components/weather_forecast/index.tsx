@@ -1,6 +1,12 @@
 import React from "react";
 
-const WeatherForecast = () => {
+type WeatherForecastProps = {
+  exampleProp: number;
+};
+
+const WeatherForecast: React.FunctionComponent<WeatherForecastProps> = ({
+  exampleProp,
+}) => {
   return (
     <div
       style={{
