@@ -39,9 +39,10 @@ const SunshineOMeter: React.FunctionComponent<SunshineProps> = ({
       <Row>
         <Col>
           <SubHeading>
+            DAYLIGHT STATUS:
             {isDaytime
-              ? `The sun sets in ${daylightLeft}`
-              : `The sun set ${daylightLeft}`}
+              ? ` The sun sets in ${daylightLeft}`
+              : ` The sun set ${daylightLeft}`}
           </SubHeading>
         </Col>
       </Row>
