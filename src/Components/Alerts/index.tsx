@@ -2,7 +2,7 @@ import React from "react";
 
 const Alerts = () => {
   return (
-    <div style={{ backgroundColor: "darkred", height: "300px" }}>ALERTS</div>
+    <div style={{ backgroundColor: "darkred", height: "200px" }}>ALERTS</div>
   );
 };
 

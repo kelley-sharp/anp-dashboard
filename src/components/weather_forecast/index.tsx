@@ -81,10 +81,10 @@ const WeatherForecast: React.FunctionComponent<WeatherForecastProps> = ({
                   </Col>
                 </Row>
                 <Row>
-                  <Col>Min: {Math.round(day.temp.min)}</Col>
+                  <Col>High: {Math.round(day.temp.max)}</Col>
                 </Row>
                 <Row>
-                  <Col>Max: {Math.round(day.temp.max)}</Col>
+                  <Col>Low: {Math.round(day.temp.min)}</Col>
                 </Row>
               </Col>
             );
