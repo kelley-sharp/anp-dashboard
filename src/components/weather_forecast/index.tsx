@@ -5,7 +5,7 @@ import { SubHeading } from "../../app";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import moment from "moment";
-import { FaSun } from "react-icons/fa";
+import { FaCloudSun } from "react-icons/fa";
 
 type WeatherForecastProps = {
   daily: DailyItem[] | undefined;
@@ -50,7 +50,7 @@ const WeatherForecast: React.FunctionComponent<WeatherForecastProps> = ({
   return (
     <div className="mt-5 mt-lg-0">
       <div className="d-flex">
-        <FaSun style={{ color: "Gold" }} className="mr-1 mt-1" />
+        <FaCloudSun style={{ color: "CornflowerBlue" }} className="mr-1 mt-1" />
         <SubHeading>WEATHER FORECAST</SubHeading>
       </div>
       <Row className="mx-2 mt-3">

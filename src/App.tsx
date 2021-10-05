@@ -47,7 +47,9 @@ function App() {
 
   return (
     <Container fluid style={{ maxWidth: 1200 }}>
-      <Header className="mb-lg-5 mb-3">Acadia National Park Dashboard</Header>
+      <Header style={{ color: "darkgreen" }} className="mb-lg-5 mb-3 mt-3">
+        Acadia National Park Dashboard
+      </Header>
       <Row>
         <Col xs={12} lg={6}>
           <Alerts />
