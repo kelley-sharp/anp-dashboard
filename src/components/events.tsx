@@ -1,8 +1,8 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { NationalParkEventsApiResponse } from "../../types/national_park_events_api";
+import { NationalParkEventsApiResponse } from "../types/national_park_events_api";
 import axios from "axios";
-import { SubHeading } from "../../app";
+import { SubHeading } from "./app";
 import Spinner from "react-bootstrap/Spinner";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";

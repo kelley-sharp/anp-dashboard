@@ -1,16 +1,16 @@
 import React from "react";
-import Map from "./components/map";
-import Alerts from "./components/alerts";
-import Events from "./components/events";
-import WeatherForecast from "./components/weather_forecast";
+import Map from "./map";
+import Alerts from "./alerts";
+import Events from "./events";
+import WeatherForecast from "./weather_forecast";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import SunshineOMeter from "./components/sunshine_o_meter";
+import SunshineOMeter from "./sunshine_o_meter";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { WeatherApiOneCallResponse } from "./types/weather_api";
+import { WeatherApiOneCallResponse } from "../types/weather_api";
 
 const Header = styled.h1`
   display: flex;

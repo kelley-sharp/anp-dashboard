@@ -1,6 +1,6 @@
 import React from "react";
-import { SubHeading } from "../../app";
-import { NationalParkAlertsApiResponse } from "../../types/national_park_alerts_api";
+import { SubHeading } from "./app";
+import { NationalParkAlertsApiResponse } from "../types/national_park_alerts_api";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Spinner from "react-bootstrap/Spinner";

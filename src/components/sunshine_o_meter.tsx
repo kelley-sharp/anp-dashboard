@@ -1,9 +1,9 @@
 import React from "react";
 import Container from "react-bootstrap/Container";
 import ProgressBar from "react-bootstrap/ProgressBar";
-import { SubHeading } from "../../app";
+import { SubHeading } from "./app";
 import moment from "moment-timezone";
-import { currentWeatherItem } from "../../types/weather_api";
+import { currentWeatherItem } from "../types/weather_api";
 import Spinner from "react-bootstrap/Spinner";
 import { FaSun } from "react-icons/fa";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Spinner } from "react-bootstrap";
-import { DailyItem } from "../../types/weather_api";
-import { SubHeading } from "../../app";
+import { DailyItem } from "../types/weather_api";
+import { SubHeading } from "./app";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import moment from "moment";
