@@ -99,13 +99,13 @@ export type NationalParkEventsDataItem = {
 };
 
 export type NationalParkEventsApiResponse = {
-  total?: number;
-  errors?: [];
-  data?: NationalParkEventsDataItem[];
-  dates?: string;
+  total: number;
+  errors: [];
+  data: NationalParkEventsDataItem[];
+  dates: string;
   // example?: 2020-01-01,2019-12-04,2019-12-11
-  pagenumber?: string;
+  pagenumber: string;
   // example?: 1
-  pagesize?: string;
+  pagesize: string;
   // example?: 50
 };
