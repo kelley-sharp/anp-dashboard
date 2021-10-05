@@ -30,29 +30,35 @@ const Alerts: React.FunctionComponent<NationalParkAlertsApiResponse> = (
 
   if (!alertsData) {
     return (
-      <Container style={{ backgroundColor: "darkred", height: "200px" }}>
+      <div>
         <SubHeading>ALERTS</SubHeading>
         <Spinner animation="border" />
-      </Container>
+      </div>
     );
   }
 
-  console.log(alertsData);
-
   return (
-    <Container style={{ backgroundColor: "white", height: "200px" }}>
-      <SubHeading>ALERTS</SubHeading>
-      <ul>
+    <div>
+      <div className="d-flex">
+        <FaExclamationTriangle className="text-danger mr-1 mt-1" />
+        <SubHeading>ALERTS</SubHeading>
+      </div>
+
+      <ol style={{ color: "maroon" }}>
         {alertsData?.data?.map((alert) => (
-          <li style={{ listStyle: "none" }} key={alert.id}>
-            <FaExclamationTriangle style={{ color: "red", margin: "5px" }} />
-            <a style={{ color: "maroon" }} href={alert.url}>
+          <li key={alert.id}>
+            <a
+              href={alert.url}
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: "maroon" }}
+            >
               {alert.title}
             </a>
           </li>
         ))}
-      </ul>
-    </Container>
+      </ol>
+    </div>
   );
 };
 

@@ -17,7 +17,7 @@ const MapFrame = styled.iframe`
 
 const Map = () => {
   return (
-    <div style={{ backgroundColor: "green", height: "400px" }}>
+    <div style={{ backgroundColor: "green", height: "400px" }} className="mt-5">
       <OuterMap>
         <MapFrame
           src="https://maps.google.com/maps?q=acadia%20national%20park&t=&z=11&ie=UTF8&iwloc=&output=embed"

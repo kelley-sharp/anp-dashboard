@@ -13,10 +13,9 @@ import axios from "axios";
 import { WeatherApiOneCallResponse } from "./types/weather_api";
 
 const Header = styled.h1`
-  height: 50px;
   display: flex;
   justify-content: center;
-  margin-top: 2rem;
+  text-align: center;
 `;
 
 export const SubHeading = styled.p`
@@ -47,41 +46,23 @@ function App() {
   }, []);
 
   return (
-    <Container fluid>
+    <Container fluid style={{ maxWidth: 1200 }}>
+      <Header className="mb-lg-5 mb-3">Acadia National Park Dashboard</Header>
       <Row>
-        <Col>
-          <Header>Acadia National Park Dashboard</Header>
+        <Col xs={12} lg={6}>
+          <Alerts />
         </Col>
-      </Row>
-      <Row>
-        <Col lg={6}>
-          <Row>
-            <Col>
-              <Alerts />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Events />
-            </Col>
-          </Row>
-        </Col>
-        <Col>
-          <Row>
-            <Col>
-              <Map />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <WeatherForecast daily={weatherData?.daily} />
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
+        <Col xs={12} lg={6}>
           <SunshineOMeter currentWeather={weatherData?.current} />
+        </Col>
+      </Row>
+      <Row>
+        <Col xs={12} lg={6}>
+          <Events />
+        </Col>
+        <Col xs={12} lg={6}>
+          <WeatherForecast daily={weatherData?.daily} />
+          <Map />
         </Col>
       </Row>
     </Container>

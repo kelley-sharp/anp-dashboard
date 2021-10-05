@@ -2,10 +2,10 @@ import React from "react";
 import { Spinner } from "react-bootstrap";
 import { DailyItem } from "../../types/weather_api";
 import { SubHeading } from "../../app";
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import moment from "moment";
+import { FaSun } from "react-icons/fa";
 
 type WeatherForecastProps = {
   daily: DailyItem[] | undefined;
@@ -28,7 +28,6 @@ const WeatherForecast: React.FunctionComponent<WeatherForecastProps> = ({
   ];
 
   //Trim extra days in forecast from data
-  const sevenDayForecast = daily?.filter((day, idx) => idx <= 6);
 
   for (let i = 0; i < weekDayMap.length; i++) {
     if (weekDayMap[i] === TodaysWeekDay) {
@@ -39,60 +38,42 @@ const WeatherForecast: React.FunctionComponent<WeatherForecastProps> = ({
   // show loading spinner if waiting for data
   if (!daily) {
     return (
-      <Container
-        style={{
-          backgroundColor: "mediumaquamarine",
-          height: "200px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <div>
         <SubHeading>WEATHER FORECAST</SubHeading>
         <Spinner animation="border" />
-      </Container>
+      </div>
     );
   }
 
+  const forecast = daily.slice(0, 5);
+
   return (
-    <Container
-      style={{
-        backgroundColor: "mediumaquamarine",
-        height: "200px",
-      }}
-    >
-      <SubHeading>WEATHER FORECAST</SubHeading>
-      <Container>
-        <Row>
-          {sevenDayForecast?.map((day, idx) => {
-            return (
-              <Col key={idx}>
-                <Row>
-                  <Col style={{ height: "10px" }}>
-                    <p>{weekDayMap[idx]}</p>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <img
-                      style={{ height: "55px", width: "55px" }}
-                      src={`http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`}
-                      alt={`${day.weather[0].main} icon`}
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>High: {Math.round(day.temp.max)}</Col>
-                </Row>
-                <Row>
-                  <Col>Low: {Math.round(day.temp.min)}</Col>
-                </Row>
-              </Col>
-            );
-          })}
-        </Row>
-      </Container>
-    </Container>
+    <div className="mt-5 mt-lg-0">
+      <div className="d-flex">
+        <FaSun style={{ color: "Gold" }} className="mr-1 mt-1" />
+        <SubHeading>WEATHER FORECAST</SubHeading>
+      </div>
+      <Row className="mx-2 mt-3">
+        {forecast.map((day, idx) => {
+          return (
+            <Col
+              key={idx}
+              className="d-flex flex-column justify-content-center align-items-center"
+            >
+              <p className="mb-1">{weekDayMap[idx]}</p>
+              <img
+                src={`http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`}
+                alt={`${day.weather[0].main} icon`}
+                height={55}
+                width={55}
+              />
+              <span>High {Math.round(day.temp.max)}</span>
+              <span>Low {Math.round(day.temp.min)}</span>
+            </Col>
+          );
+        })}
+      </Row>
+    </div>
   );
 };
 

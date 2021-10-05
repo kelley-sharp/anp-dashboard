@@ -1,7 +1,5 @@
 import React from "react";
 import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import { SubHeading } from "../../app";
 import moment from "moment-timezone";
@@ -34,6 +32,7 @@ const SunshineOMeter: React.FunctionComponent<SunshineProps> = ({
   const sunset = moment.unix(currentWeather.sunset).tz("America/New_York");
 
   const isDaytime = currentTimeET.isBetween(sunrise, sunset);
+  const isAfterSunset = currentTimeET.isAfter(sunset);
 
   const dayLength = sunset.diff(sunrise);
   const daylightLeft = sunset.from(currentTimeET);
@@ -42,49 +41,33 @@ const SunshineOMeter: React.FunctionComponent<SunshineProps> = ({
     : 100;
 
   return (
-    <Container
-      fluid
-      style={{
-        backgroundColor: "white",
-        height: "200px",
-      }}
-    >
-      <Row>
-        <Col style={{ display: "flex" }}>
-          <FaSun style={{ color: "Gold", margin: "5px" }} />
-          <SubHeading>
-            DAYLIGHT STATUS:
-            <span style={{ color: "GoldenRod" }}>
-              {isDaytime
-                ? ` The sun sets ${daylightLeft}`
-                : ` The sun set ${daylightLeft}`}
-            </span>
-          </SubHeading>
-        </Col>
-      </Row>
-      <Row>
-        <Col>Sunrise</Col>
-        <Col className="d-flex">
-          <div className="ml-auto">Sunset</div>
-        </Col>
-      </Row>
-      <Row>
-        <Col>{sunrise.format("LT")}</Col>
-        <Col className="d-flex">
-          <div className="ml-auto">{sunset.format("LT")}</div>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <ProgressBar
-            variant={isDaytime ? "warning" : "dark"}
-            now={daylightPercentage}
-            animated
-            striped
-          />
-        </Col>
-      </Row>
-    </Container>
+    <div>
+      <div className="d-flex">
+        <FaSun style={{ color: "Gold" }} className="mr-1 mt-1" />
+        <SubHeading>
+          DAYLIGHT STATUS:
+          <span style={{ color: "GoldenRod" }}>
+            {isDaytime
+              ? ` The sun sets ${daylightLeft}`
+              : isAfterSunset
+              ? ` The sun set ${daylightLeft}`
+              : ` The sun rises ${sunrise.fromNow()}`}
+          </span>
+        </SubHeading>
+      </div>
+      <div className="px-3 mt-4">
+        <ProgressBar
+          variant={isDaytime ? "warning" : "dark"}
+          now={daylightPercentage}
+          animated
+          striped
+        />
+        <div className="d-flex mt-1">
+          <h6 className="mb-0">Sunrise {sunrise.format("LT")}</h6>
+          <h6 className="mb-0 ml-auto">Sunset {sunset.format("LT")}</h6>
+        </div>
+      </div>
+    </div>
   );
 };
 

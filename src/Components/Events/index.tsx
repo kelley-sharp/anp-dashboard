@@ -113,99 +113,86 @@ const Events: React.FunctionComponent<NationalParkEventsApiResponse> = (
   };
 
   return (
-    <Card className="p-0">
-      <Card.Header>
-        <Row>
-          <Col className="d-flex align-items-center">
-            <FaSeedling
-              style={{ color: "darkgreen" }}
-              className="mb-1 pb-1 mr-1"
-            />
-            <SubHeading>EVENTS</SubHeading>
-          </Col>
-          <Col>
-            <div className="d-flex align-items-end">
+    <div className="mt-5 mt-lg-0">
+      <div className="d-flex">
+        <FaSeedling style={{ color: "darkgreen" }} className="mt-1 mr-1" />
+        <SubHeading>EVENTS</SubHeading>
+      </div>
+      <Card className="p-0">
+        <Card.Header className="bg-light">
+          <Row>
+            <Col className="d-flex align-items-end">
               <DateLabel className="mb-0 d-flex align-items-center pr-1">
-                Start
+                Start Date
               </DateLabel>
               <DatePicker
                 name="start-date"
                 selected={startDate}
                 onChange={(date) => handleStartDateFilter(date as Date)}
               />
-            </div>
-          </Col>
-          <Col>
-            <div className="d-flex align-items-end">
+            </Col>
+            <Col className="d-flex align-items-end">
               <DateLabel className="mb-0 d-flex align-items-center pr-1">
-                End
+                End Date
               </DateLabel>
               <DatePicker
                 name="end-date"
                 selected={endDate}
                 onChange={(date) => handleEndDateFilter(date as Date)}
               />
-            </div>
-          </Col>
-          <Col className="d-flex align-items-center">
-            <Button
-              className="ml-auto my-0 border-0"
-              style={{ backgroundColor: "darkgreen" }}
-              size="sm"
-              onClick={handleShowAllEvents}
-            >
-              Reset Filters
-            </Button>
-          </Col>
-        </Row>
-      </Card.Header>
-      <Card.Body className="p-0">
-        <Table bordered responsive className="mb-0" size="sm" striped>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Date(s)</th>
-              <th>Cost</th>
-            </tr>
-          </thead>
-          <tbody>
-            {eventsData?.data?.map((event, idx) => {
-              return (
-                <tr key={idx}>
-                  <td>
-                    <a href={event.infourl} target="_blank" rel="noreferrer">
-                      {event.title}{" "}
-                    </a>
-                  </td>
-                  <td style={{ maxWidth: "20rem" }}>
-                    <p
-                      dangerouslySetInnerHTML={{
-                        __html: event.description ?? "",
-                      }}
-                    />
-                  </td>
-                  <td>
-                    <ul className="pl-0" style={{ listStyle: "none" }}>
-                      {event?.dates?.map((date) => (
-                        <li key={date}>{moment(date).format("MM/DD/YY")}</li>
-                      ))}
-                    </ul>
-                  </td>
-                  <td style={{ maxWidth: "12rem" }}>
-                    {event.feeinfo
-                      ? event.feeinfo
-                      : event.isfree
-                      ? "free"
-                      : "there may be a fee"}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
-      </Card.Body>
-    </Card>
+            </Col>
+            <Col className="d-flex align-items-center">
+              <Button
+                className="ml-auto my-0 border-0"
+                style={{ backgroundColor: "darkgreen" }}
+                size="sm"
+                onClick={handleShowAllEvents}
+              >
+                Reset Filters
+              </Button>
+            </Col>
+          </Row>
+        </Card.Header>
+        <Card.Body className="p-0">
+          <Table bordered responsive className="mb-0" size="sm">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Date(s)</th>
+                <th>Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+              {eventsData?.data?.map((event, idx) => {
+                return (
+                  <tr key={idx}>
+                    <td>
+                      <a href={event.infourl} target="_blank" rel="noreferrer">
+                        {event.title}{" "}
+                      </a>
+                    </td>
+                    <td>
+                      <ul className="pl-0" style={{ listStyle: "none" }}>
+                        {event?.dates?.map((date) => (
+                          <li key={date}>{moment(date).format("MM/DD/YY")}</li>
+                        ))}
+                      </ul>
+                    </td>
+                    <td style={{ maxWidth: "12rem" }}>
+                      {event.feeinfo
+                        ? event.feeinfo
+                        : event.isfree
+                        ? "free"
+                        : "there may be a fee"}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </Card.Body>
+      </Card>
+    </div>
   );
 };
 
