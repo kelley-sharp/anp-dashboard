@@ -4,7 +4,6 @@ import { NationalParkAlertsApiResponse } from "../../types/national_park_alerts_
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Spinner from "react-bootstrap/Spinner";
-import Container from "react-bootstrap/Container";
 import { FaExclamationTriangle } from "react-icons/fa";
 
 const key = process.env.REACT_APP_NATIONAL_PARK_EVENTS_API_KEY;

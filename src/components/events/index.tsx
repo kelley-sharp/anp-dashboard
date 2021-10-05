@@ -4,7 +4,6 @@ import { NationalParkEventsApiResponse } from "../../types/national_park_events_
 import axios from "axios";
 import { SubHeading } from "../../app";
 import Spinner from "react-bootstrap/Spinner";
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import DatePicker from "react-datepicker";
@@ -14,6 +13,10 @@ import Table from "react-bootstrap/Table";
 import { FaSeedling } from "react-icons/fa";
 import Card from "react-bootstrap/Card";
 import moment from "moment";
+import FormControl from "react-bootstrap/FormControl";
+import FormLabel from "react-bootstrap/FormLabel";
+import FormGroup from "react-bootstrap/FormGroup";
+import debounce from "lodash/debounce";
 
 const DateLabel = styled.label`
   height: 30px;
@@ -22,20 +25,28 @@ const DateLabel = styled.label`
 const key = process.env.REACT_APP_NATIONAL_PARK_EVENTS_API_KEY;
 const eventsUrl = `https://developer.nps.gov/api/v1/events?parkCode=acad`;
 
-const fetchEventsDataForDates = async (
-  startDate: Date | null,
-  endDate: Date | null
-): Promise<NationalParkEventsApiResponse> => {
-  const formattedStartDate = moment(startDate).format("YYYY-MM-DD");
-  const formattedEndDate = moment(endDate).format("YYYY-MM-DD");
-
-  console.log("FETCHING");
-  console.log(
-    `${eventsUrl}&dateStart=${formattedStartDate}&dateEnd=${formattedEndDate}&api_key=${key}`
-  );
-  const response = await axios.get<NationalParkEventsApiResponse>(
-    `${eventsUrl}&dateStart=${formattedStartDate}&dateEnd=${formattedEndDate}&api_key=${key}`
-  );
+const fetchEventsDataWithFilters = async ({
+  startDate,
+  endDate,
+  search,
+}: {
+  startDate: Date | null;
+  endDate: Date | null;
+  search: string | undefined;
+}): Promise<NationalParkEventsApiResponse> => {
+  let url = `${eventsUrl}&api_key=${key}`;
+  if (startDate) {
+    const formattedStartDate = moment(startDate).format("YYYY-MM-DD");
+    url += `&dateStart=${formattedStartDate}`;
+  }
+  if (endDate) {
+    const formattedEndDate = moment(endDate).format("YYYY-MM-DD");
+    url += `&dateEnd=${formattedEndDate}`;
+  }
+  if (search) {
+    url += `&q=${search}`;
+  }
+  const response = await axios.get<NationalParkEventsApiResponse>(url);
   return response.data;
 };
 
@@ -44,9 +55,6 @@ const Events: React.FunctionComponent<NationalParkEventsApiResponse> = (
 ) => {
   const [eventsData, setEventsData] =
     useState<NationalParkEventsApiResponse | null>(null);
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
-
   useEffect(() => {
     try {
       const fetchNationalParkEventsData = async () => {
@@ -60,48 +68,10 @@ const Events: React.FunctionComponent<NationalParkEventsApiResponse> = (
       console.log(error);
     }
   }, []);
-
-  if (!eventsData) {
-    return (
-      <Container
-        style={{
-          backgroundColor: "mediumorchid",
-          height: "400px",
-        }}
-      >
-        <SubHeading>EVENTS</SubHeading>
-        <Spinner animation="border" />
-      </Container>
-    );
-  }
-
-  const handleStartDateFilter = async (newStartDate: Date) => {
-    setStartDate(newStartDate);
-    try {
-      const newEventsData = await fetchEventsDataForDates(
-        newStartDate,
-        endDate
-      );
-      setEventsData(newEventsData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleEndDateFilter = async (newEndDate: Date) => {
-    setEndDate(newEndDate);
-    try {
-      const newEventsData = await fetchEventsDataForDates(
-        startDate,
-        newEndDate
-      );
-      setEventsData(newEventsData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleShowAllEvents = async () => {
+  const handleResetFilters = async () => {
+    setStartDate(null);
+    setEndDate(null);
+    setSearch("");
     try {
       const response = await axios.get<NationalParkEventsApiResponse>(
         `${eventsUrl}&api_key=${key}`
@@ -112,6 +82,55 @@ const Events: React.FunctionComponent<NationalParkEventsApiResponse> = (
     }
   };
 
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const handleStartDateFilter = async (newStartDate: Date) => {
+    setStartDate(newStartDate);
+  };
+
+  const handleEndDateFilter = async (newEndDate: Date) => {
+    setEndDate(newEndDate);
+  };
+
+  const [search, setSearch] = useState<string>("");
+  const handleSearch = async (newSearchVal: string) => {
+    setSearch(newSearchVal);
+  };
+
+  useEffect(() => {
+    const fetchAfterFiltersChange = debounce(async () => {
+      try {
+        const newEventsData = await fetchEventsDataWithFilters({
+          endDate,
+          startDate,
+          search,
+        });
+        if (newEventsData) {
+          setEventsData(newEventsData);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }, 500);
+
+    fetchAfterFiltersChange();
+
+    return () => {
+      fetchAfterFiltersChange.cancel();
+    };
+  }, [endDate, search, startDate]);
+
+  if (!eventsData) {
+    return (
+      <div>
+        <SubHeading>EVENTS</SubHeading>
+        <Spinner animation="border" />
+      </div>
+    );
+  }
+
+  const areFiltersApplied = Boolean(search || startDate || endDate);
+
   return (
     <div className="mt-5 mt-lg-0">
       <div className="d-flex">
@@ -121,32 +140,49 @@ const Events: React.FunctionComponent<NationalParkEventsApiResponse> = (
       <Card className="p-0">
         <Card.Header className="bg-light">
           <Row>
-            <Col className="d-flex align-items-end">
-              <DateLabel className="mb-0 d-flex align-items-center pr-1">
-                Start Date
-              </DateLabel>
+            <Col>
+              <DateLabel className="mb-0 pr-1">Start Date</DateLabel>
               <DatePicker
                 name="start-date"
                 selected={startDate}
                 onChange={(date) => handleStartDateFilter(date as Date)}
+                className="border-dark border rounded"
+                placeholderText="Select a date"
               />
             </Col>
-            <Col className="d-flex align-items-end">
-              <DateLabel className="mb-0 d-flex align-items-center pr-1">
-                End Date
-              </DateLabel>
+            <Col>
+              <DateLabel className="mb-0 pr-1">End Date</DateLabel>
               <DatePicker
                 name="end-date"
                 selected={endDate}
                 onChange={(date) => handleEndDateFilter(date as Date)}
+                className="border-dark border rounded"
+                placeholderText="Select a date"
               />
             </Col>
-            <Col className="d-flex align-items-center">
+          </Row>
+          <Row>
+            <Col>
+              <FormGroup className="mt-3">
+                <FormLabel>Search</FormLabel>
+                <FormControl
+                  type="text"
+                  className="border border-dark"
+                  value={search}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  placeholder="Type to filter by search keywords"
+                />
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row className="mt-4">
+            <Col className="d-flex">
               <Button
                 className="ml-auto my-0 border-0"
-                style={{ backgroundColor: "darkgreen" }}
+                style={{ backgroundColor: "green", cursor: "not-allowed" }}
                 size="sm"
-                onClick={handleShowAllEvents}
+                onClick={handleResetFilters}
+                disabled={!areFiltersApplied}
               >
                 Reset Filters
               </Button>
@@ -163,31 +199,43 @@ const Events: React.FunctionComponent<NationalParkEventsApiResponse> = (
               </tr>
             </thead>
             <tbody>
-              {eventsData?.data?.map((event, idx) => {
-                return (
-                  <tr key={idx}>
-                    <td>
-                      <a href={event.infourl} target="_blank" rel="noreferrer">
-                        {event.title}{" "}
-                      </a>
-                    </td>
-                    <td>
-                      <ul className="pl-0" style={{ listStyle: "none" }}>
-                        {event?.dates?.map((date) => (
-                          <li key={date}>{moment(date).format("MM/DD/YY")}</li>
-                        ))}
-                      </ul>
-                    </td>
-                    <td style={{ maxWidth: "12rem" }}>
-                      {event.feeinfo
-                        ? event.feeinfo
-                        : event.isfree
-                        ? "free"
-                        : "there may be a fee"}
-                    </td>
-                  </tr>
-                );
-              })}
+              {!eventsData.data || eventsData.data.length === 0 ? (
+                <tr>
+                  <td colSpan={3}>No events found.</td>
+                </tr>
+              ) : (
+                eventsData.data.map((event, idx) => {
+                  return (
+                    <tr key={idx}>
+                      <td>
+                        <a
+                          href={event.infourl}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {event.title}{" "}
+                        </a>
+                      </td>
+                      <td>
+                        <ul className="pl-0" style={{ listStyle: "none" }}>
+                          {event?.dates?.map((date) => (
+                            <li key={date}>
+                              {moment(date).format("MM/DD/YY")}
+                            </li>
+                          ))}
+                        </ul>
+                      </td>
+                      <td style={{ maxWidth: "12rem" }}>
+                        {event.feeinfo
+                          ? event.feeinfo
+                          : event.isfree
+                          ? "free"
+                          : "there may be a fee"}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </Table>
         </Card.Body>
