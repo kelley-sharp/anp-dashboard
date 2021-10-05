@@ -6,6 +6,8 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import { SubHeading } from "../../app";
 import moment from "moment-timezone";
 import { currentWeatherItem } from "../../types/weather_api";
+import Spinner from "react-bootstrap/Spinner";
+import { FaSun } from "react-icons/fa";
 
 type SunshineProps = {
   currentWeather: currentWeatherItem | undefined;
@@ -15,7 +17,17 @@ const SunshineOMeter: React.FunctionComponent<SunshineProps> = ({
   currentWeather,
 }) => {
   if (!currentWeather) {
-    return <span>Loading...</span>;
+    return (
+      <Container
+        style={{
+          backgroundColor: "white",
+          height: "200px",
+        }}
+      >
+        <SubHeading>DAYLIGHT STATUS</SubHeading>
+        <Spinner animation="border" />
+      </Container>
+    );
   }
   const currentTimeET = moment().tz("America/New_York");
   const sunrise = moment.unix(currentWeather.sunrise).tz("America/New_York");
@@ -31,18 +43,22 @@ const SunshineOMeter: React.FunctionComponent<SunshineProps> = ({
 
   return (
     <Container
+      fluid
       style={{
-        backgroundColor: "sandybrown",
-        height: "100px",
+        backgroundColor: "white",
+        height: "200px",
       }}
     >
       <Row>
-        <Col>
+        <Col style={{ display: "flex" }}>
+          <FaSun style={{ color: "Gold", margin: "5px" }} />
           <SubHeading>
             DAYLIGHT STATUS:
-            {isDaytime
-              ? ` The sun sets in ${daylightLeft}`
-              : ` The sun set ${daylightLeft}`}
+            <span style={{ color: "GoldenRod" }}>
+              {isDaytime
+                ? ` The sun sets ${daylightLeft}`
+                : ` The sun set ${daylightLeft}`}
+            </span>
           </SubHeading>
         </Col>
       </Row>

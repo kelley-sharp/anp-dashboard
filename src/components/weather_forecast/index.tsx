@@ -39,7 +39,7 @@ const WeatherForecast: React.FunctionComponent<WeatherForecastProps> = ({
   // show loading spinner if waiting for data
   if (!daily) {
     return (
-      <div
+      <Container
         style={{
           backgroundColor: "mediumaquamarine",
           height: "200px",
@@ -48,13 +48,14 @@ const WeatherForecast: React.FunctionComponent<WeatherForecastProps> = ({
           alignItems: "center",
         }}
       >
+        <SubHeading>WEATHER FORECAST</SubHeading>
         <Spinner animation="border" />
-      </div>
+      </Container>
     );
   }
 
   return (
-    <div
+    <Container
       style={{
         backgroundColor: "mediumaquamarine",
         height: "200px",
@@ -91,7 +92,7 @@ const WeatherForecast: React.FunctionComponent<WeatherForecastProps> = ({
           })}
         </Row>
       </Container>
-    </div>
+    </Container>
   );
 };
 

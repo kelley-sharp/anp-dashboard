@@ -39,7 +39,6 @@ function App() {
           `${weatherBaseURL}lat=${coordinates[0]}&lon=${coordinates[1]}&appid=${key}&units=imperial`
         );
         setWeatherData(response.data);
-        console.log(response.data);
       };
       fetchWeatherData();
     } catch (error) {
@@ -55,7 +54,7 @@ function App() {
         </Col>
       </Row>
       <Row>
-        <Col>
+        <Col lg={6}>
           <Row>
             <Col>
               <Alerts />
@@ -78,11 +77,11 @@ function App() {
               <WeatherForecast daily={weatherData?.daily} />
             </Col>
           </Row>
-          <Row>
-            <Col>
-              <SunshineOMeter currentWeather={weatherData?.current} />
-            </Col>
-          </Row>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <SunshineOMeter currentWeather={weatherData?.current} />
         </Col>
       </Row>
     </Container>
