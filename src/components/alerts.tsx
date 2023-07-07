@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Spinner from "react-bootstrap/Spinner";
 import { FaExclamationTriangle } from "react-icons/fa";
+require("dotenv").config();
 
 const key = process.env.REACT_APP_NATIONAL_PARK_EVENTS_API_KEY;
 const alertsApiUrl = `https://developer.nps.gov/api/v1/alerts?parkCode=acad&api_key=${key}`;
